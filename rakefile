@@ -1,2 +1,2 @@
-require 'standalone_migrations'
-StandaloneMigrations::Tasks.load_tasks
+require "sinatra/activerecord/rake"
+require "./graduation"

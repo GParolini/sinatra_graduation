@@ -1,10 +1,20 @@
 require "sinatra"
-require "erb"
+require "sinatra/activerecord"
+require "./models/contact"
 
-get "/" do
-  "<html><body><h1>My Sinatra graduation project</h1><h2>How to Build a Contact List Website</h2></body></html>"
-end
+set :database, "sqlite3:development.sqlite3"
 
 get "/contacts" do
-  erb :index
+  @contacts = Contact.all
+  erb :contacts
+end
+
+
+get "/contacts/new" do
+  erb :contact_new_form
+end
+
+post '/contacts' do
+  Contact.create(name: params[:name])
+  redirect "/contacts"
 end
