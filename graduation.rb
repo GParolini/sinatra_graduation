@@ -15,7 +15,12 @@ get "/contacts/new" do
 end
 
 post '/contacts' do
-  Contact.create(name: params[:name])
+  contact = Contact.new(name: params[:name])
+  if contact.valid?
+    contact.save
+  else
+    puts "Contact name cannot be blank"
+  end
   redirect "/contacts"
 end
 
@@ -38,4 +43,20 @@ end
 delete "/contacts/:id" do
   contact = Contact.destroy(params[:id])
   redirect "/contacts"
+end
+
+get "/contacts/:id/display" do
+  @contact= Contact.find(params[:id])
+  erb :contact_display
+end
+
+
+post "/contacts/:id/display" do
+  phone_number = @contact.phone_number_create
+  if phone_number.valid?
+    phone_number.save
+  else
+    puts "Phone number cannot be blank"
+  end
+  redirect "/contacts/:id"
 end
