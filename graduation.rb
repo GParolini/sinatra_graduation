@@ -9,7 +9,6 @@ get "/contacts" do
   erb :contacts
 end
 
-
 get "/contacts/new" do
   erb :contact_new_form
 end
@@ -22,6 +21,11 @@ post '/contacts' do
     puts "Contact name cannot be blank"
   end
   redirect "/contacts"
+end
+
+get "/contacts/:id/display" do
+  @contact_phone_numbers= Contact.find(params[:id]).phone_number.all
+  erb :contact_display
 end
 
 get "/contacts/:id/edit" do
@@ -45,22 +49,17 @@ delete "/contacts/:id" do
   redirect "/contacts"
 end
 
-get "/contacts/:id/display" do
+get "/contacts/:id/add" do
   @contact= Contact.find(params[:id])
-  puts @contact.numbers
-  erb :contact_display
-end
-
-get "/contacts/:id/add_new" do
-  erb :contact_add_new
+  erb :contact_add
 end
 
 post "/contacts/:id" do
-  number = Phone_number.new(number: params[:id])
+  number = Phone_number.new(params[:id])
   if number.valid?
     number.save
   else
     puts "Phone number cannot be blank"
   end
-  redirect "/contacts/:id"
+  redirect "/contacts"
 end
