@@ -47,14 +47,18 @@ end
 
 get "/contacts/:id/display" do
   @contact= Contact.find(params[:id])
+  puts @contact.numbers
   erb :contact_display
 end
 
+get "/contacts/:id/add_new" do
+  erb :contact_add_new
+end
 
-post "/contacts/:id/display" do
-  phone_number = @contact.phone_number_create
-  if phone_number.valid?
-    phone_number.save
+post "/contacts/:id" do
+  number = Phone_number.new(number: params[:id])
+  if number.valid?
+    number.save
   else
     puts "Phone number cannot be blank"
   end

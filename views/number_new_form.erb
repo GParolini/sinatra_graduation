@@ -1,0 +1,6 @@
+<form action="/contacts/<%= @contact.id %>" method="POST">
+  <input type="hidden" name="_method" value="put" />
+
+  name: <input value=<%= @contact.name %> type="text" number="number">
+  <input type="submit" value="add a phone number">
+</form>
