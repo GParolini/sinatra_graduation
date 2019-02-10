@@ -1,6 +1,7 @@
 require "sinatra"
 require "sinatra/activerecord"
 require "./models/contact"
+require "./models/phone_number"
 
 set :database, "sqlite3:development.sqlite3"
 
@@ -24,7 +25,7 @@ post '/contacts' do
 end
 
 get "/contacts/:id/display" do
-  @contact_phone_numbers= Contact.find(params[:id]).phone_number.all
+  @contact= Contact.find(params[:id])
   erb :contact_display
 end
 
@@ -55,9 +56,10 @@ get "/contacts/:id/add" do
 end
 
 post "/contacts/:id" do
-  number = Phone_number.new(params[:id])
-  if number.valid?
-    number.save
+  @contact= Contact.find(params[:id])
+  phone_number = @contact.phone_numbers.new(phone_number: params[:phone_number])
+  if phone_number.valid?
+    phone_number.save
   else
     puts "Phone number cannot be blank"
   end
