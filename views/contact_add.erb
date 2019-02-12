@@ -1,5 +1,5 @@
-<form action="/contacts/<%= @contact.id %>" method="POST">
-  <input type="hidden" name="_method" value="put" />
-  <input type="text" ><br>
+<form action="/contacts/<%= @contact.id %>/phone_numbers" method="POST">
+  <input type="hidden" name="_method" value="PUT" />
+  <input type="text" name="phone_number"><br>
   <input type="submit" value="add a phone number">
 </form>
