@@ -60,11 +60,10 @@ put "/contacts/:id/phone_numbers" do
   contact_id = params[:id]
   constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
   @phone_number = PhoneNumber.new(constructor_parameters)
-  if @phone_number.valid?
-    @phone_number.save
+  if phone_number.valid?
+    phone_number.save
   else
     puts "Phone number cannot be blank"
   end
-  puts "Test #{contact_id}"
-  redirect "/contacts/#{contact_id}/display"
+  redirect "/contacts"
 end

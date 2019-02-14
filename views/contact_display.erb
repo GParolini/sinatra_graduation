@@ -1,3 +1,7 @@
 <h2><%= @contact.name %></h2>
 
-<h2><%= @contact.inspect %></h2>
+<ul>
+  <% @contact.phone_numbers.each do |phone_number| %>
+    <li> <a href="/contacts/<%= @contact.id %>"> <%= PhoneNumber.all %> </a> </li>
+  <% end %>
+</ul>
