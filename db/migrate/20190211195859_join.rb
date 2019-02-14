@@ -1,7 +1,6 @@
-class Join < ActiveRecord::Migration[5.2]
+class CreateJoinTablePhoneNumbers < ActiveRecord::Migration[5.0]
   def change
-    change_table :phone_numbers do |t|
-      t.belongs_to :contact
-  end
+    create_join_table :name, :phone_numbers do |t|
+    end
   end
 end
