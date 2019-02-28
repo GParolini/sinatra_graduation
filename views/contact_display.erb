@@ -1,7 +1,6 @@
 <h2><%= @contact.name %></h2>
 
-<ul>
-  <% @contact.phone_numbers.each do |phone_number| %>
-    <li> <a href="/contacts/<%= @contact.id %>"> <%= PhoneNumber.all %> </a> </li>
-  <% end %>
-</ul>
+<h4>Phone numbers</h4>
+<% @contact.phone_numbers.each do |record| %>
+<%= record.phone_number %> <br>
+<%end%>

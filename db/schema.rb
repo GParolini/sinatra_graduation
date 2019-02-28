@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 2019_02_11_195859) do
   end
 
   create_table "phone_numbers", force: :cascade do |t|
-    t.string "phone_number"
     t.integer "contact_id"
+    t.string "phone_number"
   end
 
 end

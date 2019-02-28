@@ -1,7 +1,7 @@
 require "sinatra"
 require "sinatra/activerecord"
 require "./models/contact"
-require "./models/phone_numbers"
+require "./models/phone_number"
 
 set :database, "sqlite3:development.sqlite3"
 
@@ -35,8 +35,23 @@ get "/contacts/:id/edit" do
 end
 
 put "/contacts/:id" do
-  contact = Contact.find(params[:id])
-  contact.update(name: params[:name])
+  @contact = Contact.find(params[:id])
+  @contact.update(name: params[:name])
+  if @contact.valid?
+    @contact.save
+  else
+    puts "Contact name cannot be blank"
+  end
+
+  #phone_number = params[:phone_number]
+  #contact_id = params[:id]
+  #constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
+  records = [@contact.phone_numbers]
+  records.map! {phone_number: params[:phone_number]}
+
+
+
+
   redirect "/contacts"
 end
 
@@ -46,7 +61,8 @@ get "/contacts/:id/delete" do
 end
 
 delete "/contacts/:id" do
-  contact = Contact.destroy(params[:id])
+  @contact = Contact.find(params[:id])
+  @contact.destroy
   redirect "/contacts"
 end
 
@@ -60,8 +76,8 @@ put "/contacts/:id/phone_numbers" do
   contact_id = params[:id]
   constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
   @phone_number = PhoneNumber.new(constructor_parameters)
-  if phone_number.valid?
-    phone_number.save
+  if @phone_number.valid?
+    @phone_number.save
   else
     puts "Phone number cannot be blank"
   end
