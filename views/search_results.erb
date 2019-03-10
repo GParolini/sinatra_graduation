@@ -1,0 +1,5 @@
+<% if @contacts.present? %>
+  <%= render @contacts %>
+<% else %>
+  <p>There are no contacts with the name <%= params[:search] %>.</p>
+<% end %>

@@ -17,7 +17,7 @@ end
 post '/contacts' do
   contact = Contact.new(name: params[:name])
   if contact.valid?
-    contact.save
+    then contact.save
   else
     puts "Contact name cannot be blank"
   end
@@ -43,13 +43,13 @@ put "/contacts/:id" do
     puts "Contact name cannot be blank"
   end
 
-  #phone_number = params[:phone_number]
-  #contact_id = params[:id]
-  #constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
-  records = [@contact.phone_numbers]
-  records.map! {phone_number: params[:phone_number]}
-
-
+  phone_number = params[:phone_number]
+  contact_id = params[:id]
+  constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
+  @contact.phone_numbers.each do |record|
+    record.update(phone_number: params[:phone_number])
+  end
+  @contact.save
 
 
   redirect "/contacts"
@@ -82,4 +82,18 @@ put "/contacts/:id/phone_numbers" do
     puts "Phone number cannot be blank"
   end
   redirect "/contacts"
+end
+
+get "/contacts/search" do
+  erb :search
+end
+
+post '/contacts/search' do
+  @contacts = Contact.all
+  if params[:search]
+    @contacts = Contact.search(params[:search]).order("created_at DESC")
+  else
+    @contacts = Contact.all.order('created_at DESC')
+  end
+redirect "/contacts/search_results"
 end
