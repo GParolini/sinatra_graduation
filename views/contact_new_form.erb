@@ -1,3 +1,9 @@
+<% if session[:errors] %>
+<% session[:errors].full_messages.each do |message| %>
+<p><%= message %> </p>
+<%end%>
+<% end %>
+
 <form action="/contacts" method="POST">
 
   Name:<br>

@@ -1,17 +1,24 @@
+<% if session[:error] %>
+<p><%= session[:error] %></p>
+<% end %>
+
 <form action="/contacts/<%= @contact.id %>" method="POST">
   <input type="hidden" name="_method" value="put" />
 
   name: <input value=<%= @contact.name %> type="text" name="name">
-  <input type="submit" value="save changes">
+
 <br>
 <br>
 
   Phone numbers:
+
   <br>
   <% @contact.phone_numbers.each do |record| %>
-  <input value=<%= record.phone_number %> type="text" name="phone_number">
-  <input type="submit" value="save changes"><br />
+  <input value="<%= record.phone_number %>" type="text" name="phone_numbers[]">
   <%end%>
+
+<br>
+  <input type="submit" value="save changes">
 
 
 </form>

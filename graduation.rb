@@ -2,8 +2,12 @@ require "sinatra"
 require "sinatra/activerecord"
 require "./models/contact"
 require "./models/phone_number"
+require "byebug"
 
 set :database, "sqlite3:development.sqlite3"
+
+enable :sessions
+
 
 get "/contacts" do
   @contacts = Contact.all
@@ -16,12 +20,12 @@ end
 
 post '/contacts' do
   contact = Contact.new(name: params[:name])
-  if contact.valid?
-    then contact.save
-  else
-    puts "Contact name cannot be blank"
-  end
-  redirect "/contacts"
+    if contact.save
+      redirect "/contacts"
+    else
+      session[:errors] =  contact.errors
+      redirect "/contacts/new"
+    end
 end
 
 get "/contacts/:id/display" do
@@ -37,22 +41,27 @@ end
 put "/contacts/:id" do
   @contact = Contact.find(params[:id])
   @contact.update(name: params[:name])
-  if @contact.valid?
-    @contact.save
+  if @contact.save &&
   else
-    puts "Contact name cannot be blank"
+    session[:errors] =  'Contact name cannot be blank'
+    redirect "/contacts/#{contact_id}/edit"
   end
 
-  phone_number = params[:phone_number]
+  phone_numbers = params[:phone_numbers]
   contact_id = params[:id]
-  constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
-  @contact.phone_numbers.each do |record|
-    record.update(phone_number: params[:phone_number])
+  constructor_parameters = {"phone_numbers"=>phone_numbers, "contact_id"=>contact_id}
+  @contact.phone_numbers.each_with_index do |record, index|
+    record.update(phone_number: params[:phone_numbers][index])
   end
-  @contact.save
 
+  if @phone_number.valid?
+    @phone_number.save
+    redirect "/contacts"
+  else
+    session[:error] =  'Phone number cannot be blank'
+    redirect "/contacts/#{contact_id}/edit"
+  end
 
-  redirect "/contacts"
 end
 
 get "/contacts/:id/delete" do
@@ -76,13 +85,14 @@ put "/contacts/:id/phone_numbers" do
   contact_id = params[:id]
   constructor_parameters = {"phone_number"=>phone_number, "contact_id"=>contact_id}
   @phone_number = PhoneNumber.new(constructor_parameters)
-  if @phone_number.valid?
-    @phone_number.save
+  if @phone_number.save
+    redirect "/contacts"
   else
-    puts "Phone number cannot be blank"
+    session[:errors] = @phone_number.errors
+    redirect "/contacts/#{contact_id}/add"
   end
-  redirect "/contacts"
 end
+
 
 get "/contacts/search" do
   erb :search
