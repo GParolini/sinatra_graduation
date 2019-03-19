@@ -1,5 +1,6 @@
 require "sinatra"
 require "sinatra/activerecord"
+require "bootstrap"
 require "./models/contact"
 require "./models/phone_number"
 require "byebug"
@@ -41,11 +42,7 @@ end
 put "/contacts/:id" do
   @contact = Contact.find(params[:id])
   @contact.update(name: params[:name])
-  if @contact.save &&
-  else
-    session[:errors] =  'Contact name cannot be blank'
-    redirect "/contacts/#{contact_id}/edit"
-  end
+
 
   phone_numbers = params[:phone_numbers]
   contact_id = params[:id]
@@ -53,15 +50,6 @@ put "/contacts/:id" do
   @contact.phone_numbers.each_with_index do |record, index|
     record.update(phone_number: params[:phone_numbers][index])
   end
-
-  if @phone_number.valid?
-    @phone_number.save
-    redirect "/contacts"
-  else
-    session[:error] =  'Phone number cannot be blank'
-    redirect "/contacts/#{contact_id}/edit"
-  end
-
 end
 
 get "/contacts/:id/delete" do
