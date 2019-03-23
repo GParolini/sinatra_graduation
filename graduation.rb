@@ -9,6 +9,11 @@ set :database, "sqlite3:development.sqlite3"
 
 enable :sessions
 
+get "/" do
+  "Hello World"
+  erb :home
+end
+
 
 get "/contacts" do
   @contacts = Contact.all
